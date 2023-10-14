@@ -1,59 +1,54 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Form, Label, Input, Button } from './ContactForm.styled';
 
-export class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
+export const ContactForm = ({ onContactSubmit }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  const handleChange = ev => {
+    const { name, value } = ev.target;
+    if (name === 'name') {
+      setName(value);
+    } else if (name === 'number') {
+      setNumber(value);
+    }
   };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    const { name, number } = this.state;
-
-    this.props.onContactSubmit({ name, number });
-    this.setState({
-      name: '',
-      number: '',
-    });
+    onContactSubmit({ name, number });
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    return (
-      <div>
-        <Form onSubmit={this.handleSubmit}>
-          <Label>
-            Name
-            <Input
-              type="text"
-              name="name"
-              required
-              value={this.state.name}
-              onChange={this.handleChange}
-              pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              placeholder="Enter contact name"
-            />
-          </Label>
-          <Label>
-            Number
-            <Input
-              type="tel"
-              name="number"
-              required
-              value={this.state.number}
-              onChange={this.handleChange}
-              pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-            />
-          </Label>
-          <Button type="submit">Add contact</Button>
-        </Form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Form onSubmit={handleSubmit}>
+        <Label>
+          Name
+          <Input
+            type="text"
+            name="name"
+            required
+            value={name}
+            onChange={handleChange}
+            pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            placeholder="Enter contact name"
+          />
+        </Label>
+        <Label>
+          Number
+          <Input
+            type="tel"
+            name="number"
+            required
+            value={number}
+            onChange={handleChange}
+            pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
+          />
+        </Label>
+        <Button type="submit">Add contact</Button>
+      </Form>
+    </div>
+  );
+};
